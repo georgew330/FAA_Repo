@@ -32,6 +32,7 @@ async function getToken() {
   if (!cachedToken || (tokenExpiry && Date.now() > tokenExpiry)) {
     await authenticate();
   }
+  console.log("runs")
   return cachedToken;
 }
 
@@ -52,8 +53,9 @@ export async function POST(request) {
       },
       body: JSON.stringify(body),
     });
-    
+    console.log("res", res)
     const json = await res.json();
+    console.log("json:", json)
     
     return new Response(JSON.stringify(json), {
       status: res.status,

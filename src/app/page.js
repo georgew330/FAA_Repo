@@ -48,22 +48,18 @@ export default function Home() {
         const site = sites[i];
         
         try {
-          // Build request using ALL fields from CSV
-          const requestData = {
-            SiteId: site.SiteId,
-            StructureType: site.StructureType,
-            Latitude: site.Latitude,
-            Longitude: site.Longitude,
-            StudyOf: site.StudyOf,
-            SiteElevation: site.SiteElevation,
-            AGL: site.AGL,
-            AMSL: site.AMSL,
-            State: site.State,
-            StudyCriteria: site.StudyCriteria,
-            StudyType: site.StudyType,
-            StickDistance: site.StickDistance,
-            Range: site.Range
-          };
+          // Use the parsed CSV data, remove UI-specific fields and empty values
+          const { status, errorMessage, ...allData } = site;
+          
+          // Filter out empty values
+          const requestData = {};
+          Object.keys(allData).forEach(key => {
+            if (allData[key] && allData[key].trim() !== '') {
+              requestData[key] = allData[key];
+            }
+          });
+          
+          console.log(requestData)
 
           const response = await fetch('/api/pointstudy', {
             method: 'POST',
